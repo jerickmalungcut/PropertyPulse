@@ -22,7 +22,7 @@ const Navbar = () => {
   // To switch the active background on navigation
   const pathname = usePathname();
 
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   return (
     <nav className="bg-blue-700 border-b border-blue-500">
