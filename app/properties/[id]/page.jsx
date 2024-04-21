@@ -1,28 +1,39 @@
 "use client";
 // If you're using the useRouter, useState and other hooks you need to put the use client to prevent the error because the default value was use server
 
-import {
-  useRouter,
-  useParams,
-  useSearchParams,
-  usePathname,
-} from "next/navigation";
+import { useState, useEffect } from "react";
+
+import { useParams } from "next/navigation";
+import { fetchProperty } from "@/utils/request";
 
 const PropertyPage = () => {
-  const router = useRouter();
   const { id } = useParams();
-  const searchParams = useSearchParams();
-  const name = searchParams.get("name");
-  const pathname = usePathname();
+
+  const [property, setProperty] = useState(null);
+  const [loading, setLoading] = useState(null);
+
+  useEffect(() => {
+    const fetchPropertyData = async () => {
+      if (!id) return;
+
+      try {
+        const property = await fetchProperty(id);
+        setProperty(property);
+      } catch (error) {
+        console.error("Error fetching property:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (property === null) {
+      fetchPropertyData();
+    }
+  }, [id, property]);
 
   return (
     <div className="w-full h-screen flex justify-center items-center">
-      <button
-        onClick={() => router.push("/properties")}
-        className=" border border-white py-2 px-4 rounded-full"
-      >
-        Go home {pathname}
-      </button>
+      Property Page
     </div>
   );
 };
